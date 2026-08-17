@@ -100,5 +100,17 @@
     "proxy": "http://117.236.124.166:3128",
     "name": "Ikhsan Zulkarnain, M.Ak",
     "phone": "088878971542"
+  },
+  {
+    "ts": "2026-08-17 21:12:09",
+    "proxy": "http://103.142.21.197:8080",
+    "name": "R.A. Hilda Purwanti, S.H.",
+    "phone": "085452020724"
+  },
+  {
+    "ts": "2026-08-17 21:12:24",
+    "proxy": "http://190.97.236.129:999",
+    "name": "Tgk. Makara Waskita, S.Kom",
+    "phone": "089662739800"
   }
 ]
