@@ -4,12 +4,17 @@ Auto-test flow voting dengan Camoufox (browser stealth Firefox + Playwright)
 dan rotasi proxy gratis dari beberapa sumber (semua di-fetch via jsdelivr CDN,
 bebas rate limit GitHub):
 
-| Sumber | Update | Format |
-|--------|--------|--------|
-| [proxifly/free-proxy-list](https://github.com/proxifly/free-proxy-list) | ~5 menit | JSON (metadata negara/anonimitas) |
-| [monosans/proxy-list](https://github.com/monosans/proxy-list) | rutin | teks `ip:port` |
-| [zloi-user/hideip.me](https://github.com/zloi-user/hideip.me) | ~10 menit | teks `ip:port:Negara` |
+| Sumber | Update | Format | Ukuran* |
+|--------|--------|--------|---------|
+| [proxifly/free-proxy-list](https://github.com/proxifly/free-proxy-list) | ~5 menit | JSON (metadata negara/anonimitas) | ~600 |
+| [monosans/proxy-list](https://github.com/monosans/proxy-list) | rutin | teks `ip:port` | ~300 |
+| [zloi-user/hideip.me](https://github.com/zloi-user/hideip.me) | ~10 menit | teks `ip:port:Negara` | ~150 |
+| [TheSpeedX/PROXY-List](https://github.com/TheSpeedX/PROXY-List) | rutin | teks `ip:port` | ~2.500 |
+| [jetkai/proxy-list](https://github.com/jetkai/proxy-list) | rutin | teks `ip:port` | ~1.700 |
+| [clarketm/proxy-list](https://github.com/clarketm/proxy-list) | rutin | teks `ip:port` | ~400 |
+| [roosterkid/openproxylist](https://github.com/roosterkid/openproxylist) | rutin | teks `ip:port` (HTTPS/CONNECT) | ~80 |
 
+*Ukuran perkiraan baris; sebagian besar mati, pre-filter curl yang menyaring.
 (`monosans/proxy-scraper-checker` adalah repo *tool* generator — tidak
 mempublikasikan list, jadi dilewati sebagai sumber data.)
 
@@ -67,9 +72,14 @@ Opsi penting `mass_vote.py`:
 
 ## Pemilihan sumber
 
-`--sources proxifly,monosans,hideip` (default: semua). Semua sumber
-digabung, di-dedup, dan difilter dari `used_proxies.json`. Pre-filter curl
-tetap mengetes tiap proxy (situs + host Turnstile) sebelum dipakai browser.
+`--sources proxifly,monosans,hideip,thespeedx,jetkai,clarketm,roosterkid`
+(default: semua). Semua sumber digabung, di-dedup, difilter dari
+`used_proxies.json`, dan diurutkan berdasarkan kualitas sumber (sumber
+terverifikasi seperti proxifly/monosans/hideip di-scan duluan). Pre-filter
+curl tetap mengetes tiap proxy (situs + host Turnstile) sebelum dipakai
+browser — karena banyak daftar mentah (thespeedx/jetkai) yang sebagian
+besar mati, pakai `--precheck-target` agar berhenti setelah cukup proxy
+hidup terkumpul.
 
 ## Penyimpanan status (persisten)
 

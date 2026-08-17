@@ -46,5 +46,59 @@
     "proxy": "http://181.78.74.171:999",
     "name": "Kania Pradipta",
     "phone": "088953998851"
+  },
+  {
+    "ts": "2026-08-17 20:37:44",
+    "proxy": "http://1.231.81.166:3128",
+    "name": "Hj. Paramita Setiawan",
+    "phone": "089779283114"
+  },
+  {
+    "ts": "2026-08-17 20:38:21",
+    "proxy": "http://109.94.1.23:4050",
+    "name": "KH. Baktiono Astuti, S.Sos",
+    "phone": "081310637723"
+  },
+  {
+    "ts": "2026-08-17 20:38:47",
+    "proxy": "http://181.78.74.252:999",
+    "name": "Jelita Hutasoit, M.Farm",
+    "phone": "087797813022"
+  },
+  {
+    "ts": "2026-08-17 20:38:51",
+    "proxy": "http://190.97.236.128:999",
+    "name": "Heryanto Hassanah, S.H.",
+    "phone": "088231898214"
+  },
+  {
+    "ts": "2026-08-17 20:38:55",
+    "proxy": "http://95.3.69.222:8080",
+    "name": "Puti Uchita Budiman, S.E.",
+    "phone": "086714541071"
+  },
+  {
+    "ts": "2026-08-17 20:39:00",
+    "proxy": "http://181.39.25.196:8118",
+    "name": "Yulia Puspasari",
+    "phone": "082748455920"
+  },
+  {
+    "ts": "2026-08-17 20:40:35",
+    "proxy": "http://14.139.235.82:3128",
+    "name": "Kemba Irawan",
+    "phone": "083057340205"
+  },
+  {
+    "ts": "2026-08-17 20:55:36",
+    "proxy": "http://103.237.102.191:11111",
+    "name": "Cinthia Permadi",
+    "phone": "081915812960"
+  },
+  {
+    "ts": "2026-08-17 20:56:24",
+    "proxy": "http://117.236.124.166:3128",
+    "name": "Ikhsan Zulkarnain, M.Ak",
+    "phone": "088878971542"
   }
 ]

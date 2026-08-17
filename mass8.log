@@ -1,0 +1,106 @@
+/Users/pajak/Project/Script/pawai/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+Mass voting dimulai. Ctrl+C untuk berhenti.
+
+================================================================
+Siklus 1 — 20:51:33
+    + proxifly: 0 proxy baru (total 0)
+    + monosans: 0 proxy baru (total 0)
+    + hideip: 0 proxy baru (total 0)
+    + thespeedx: 2520 proxy baru (total 2520)
+    + jetkai: 1741 proxy baru (total 4261)
+    + clarketm: 0 proxy baru (total 4261)
+    + roosterkid: 56 proxy baru (total 4317)
+  Proxy baru tersedia: 4317 (sudah buang 1601 yang dicek/dipakai)
+[*] Pre-filter 4317 proxy dengan curl (40 paralel)...
+    ...50/4317 dicek, 1 hidup
+    ...100/4317 dicek, 1 hidup
+    ...150/4317 dicek, 1 hidup
+    ...200/4317 dicek, 2 hidup
+    ...250/4317 dicek, 2 hidup
+    ...300/4317 dicek, 2 hidup
+    ...350/4317 dicek, 2 hidup
+    ...400/4317 dicek, 2 hidup
+    ...450/4317 dicek, 2 hidup
+    ...500/4317 dicek, 2 hidup
+    ...550/4317 dicek, 2 hidup
+    ...600/4317 dicek, 2 hidup
+    ...650/4317 dicek, 2 hidup
+    ...700/4317 dicek, 2 hidup
+    ...750/4317 dicek, 2 hidup
+    ...800/4317 dicek, 2 hidup
+    ...850/4317 dicek, 2 hidup
+    ...900/4317 dicek, 2 hidup
+    ...950/4317 dicek, 2 hidup
+    ...1000/4317 dicek, 2 hidup
+    ...1050/4317 dicek, 2 hidup
+    ...1100/4317 dicek, 2 hidup
+    ...1150/4317 dicek, 2 hidup
+    ...1200/4317 dicek, 2 hidup
+    ...1250/4317 dicek, 2 hidup
+    ...1300/4317 dicek, 2 hidup
+    ...1350/4317 dicek, 3 hidup
+    ...1400/4317 dicek, 3 hidup
+    ...1450/4317 dicek, 3 hidup
+    ...1500/4317 dicek, 3 hidup
+    ...1550/4317 dicek, 3 hidup
+    ...1600/4317 dicek, 3 hidup
+    ...1650/4317 dicek, 3 hidup
+    ...1700/4317 dicek, 3 hidup
+    ...1750/4317 dicek, 3 hidup
+    ...1800/4317 dicek, 3 hidup
+    ...1850/4317 dicek, 3 hidup
+    ...1900/4317 dicek, 3 hidup
+    ...1950/4317 dicek, 3 hidup
+    ...2000/4317 dicek, 3 hidup
+    ...2050/4317 dicek, 4 hidup
+    ...2100/4317 dicek, 5 hidup
+    ...2150/4317 dicek, 6 hidup
+    ...2200/4317 dicek, 6 hidup
+    ...2250/4317 dicek, 6 hidup
+    ...2300/4317 dicek, 7 hidup
+    ...2350/4317 dicek, 7 hidup
+    ...2400/4317 dicek, 7 hidup
+    ...2450/4317 dicek, 7 hidup
+    ...2500/4317 dicek, 7 hidup
+    ...2550/4317 dicek, 7 hidup
+    ...2600/4317 dicek, 7 hidup
+    ...2650/4317 dicek, 7 hidup
+    ...2700/4317 dicek, 7 hidup
+    ...2750/4317 dicek, 7 hidup
+    ...2800/4317 dicek, 7 hidup
+    ...2850/4317 dicek, 7 hidup
+    ...2900/4317 dicek, 7 hidup
+    ...2950/4317 dicek, 7 hidup
+    ...3000/4317 dicek, 7 hidup
+    ...3050/4317 dicek, 7 hidup
+    ...3100/4317 dicek, 8 hidup
+    ...3150/4317 dicek, 8 hidup
+    ...3200/4317 dicek, 8 hidup
+    ...3250/4317 dicek, 8 hidup
+    ...3300/4317 dicek, 8 hidup
+    ...3350/4317 dicek, 8 hidup
+    ...3400/4317 dicek, 8 hidup
+    -> 9/4317 proxy hidup (3436 di-scan)
+  9 proxy hidup -> dispatch ke 3 worker paralel
+  [✓] 20:55:36 http://103.237.102.191:11111 -> success | sukses: 1 (0.2/menit)
+       {"success":true,"replayed":false}
+  [ ] 20:55:47 http://119.18.147.146:8080 -> connect_error | sukses: 1 (0.2/menit)
+  [ ] 20:56:13 http://66.163.119.55:10006 -> turnstile | sukses: 1 (0.2/menit)
+  [✓] 20:56:24 http://117.236.124.166:3128 -> success | sukses: 2 (0.4/menit)
+       {"success":true,"replayed":false}
+  [ ] 20:56:39 http://37.59.125.131:8888 -> turnstile | sukses: 2 (0.4/menit)
+  [ ] 20:56:40 http://165.245.187.193:3128 -> connect_error | sukses: 2 (0.4/menit)
+  [ ] 20:56:50 http://82.102.11.164:3460 -> unknown | sukses: 2 (0.4/menit)
+  [ ] 20:56:55 http://203.175.126.229:8000 -> connect_error | sukses: 2 (0.4/menit)
+  [ ] 20:58:04 http://195.158.8.123:3128 -> turnstile | sukses: 2 (0.3/menit)
+  Siklus 1 selesai: {'success': 2, 'connect_error': 3, 'turnstile': 3, 'unknown': 1}
+  Total sementara: {'success': 2, 'connect_error': 3, 'turnstile': 3, 'unknown': 1}
+
+================================================================
+=== STATISTIK AKHIR (6.7 menit) ===
+  connect_error: 3
+  turnstile: 3
+  success: 2
+  unknown: 1
+  Rata-rata: 0.3 vote/menit

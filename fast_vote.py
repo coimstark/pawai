@@ -209,6 +209,17 @@ def main():
     name = args.name or auto_test.random_name()
     phone = args.phone or auto_test.random_phone()
     t0 = time.time()
+    try:
+        return _main(args, proxy, name, phone, t0)
+    except Exception as e:
+        print(f"RESULT:error|{type(e).__name__}: {str(e)[:200]}")
+        if proxy:
+            auto_test.mark_used(proxy, "error")
+        return 1
+
+
+def _main(args, proxy, name, phone, t0):
+    """Badan utama; dibungkus try/except agar RESULT selalu terprint."""
 
     # 1. Config -> sitekey
     sitekey, err = get_sitekey(proxy)

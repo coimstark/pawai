@@ -36,7 +36,7 @@ PROXY_LIST_URL = (
     "https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/"
     "proxies/protocols/http/data.json"
 )
-# Sumber proxy tambahan (semua via jsdelivr CDN agar bebas rate limit)
+# Sumber proxy (semua via jsdelivr CDN agar bebas rate limit GitHub)
 PROXY_SOURCES = {
     "proxifly": {"url": PROXY_LIST_URL, "format": "json"},
     "monosans": {
@@ -47,6 +47,26 @@ PROXY_SOURCES = {
     "hideip": {
         "url": "https://cdn.jsdelivr.net/gh/zloi-user/hideip.me@main/http.txt",
         "format": "txt_country",
+    },
+    "thespeedx": {
+        "url": "https://cdn.jsdelivr.net/gh/TheSpeedX/PROXY-List@master/"
+               "http.txt",
+        "format": "txt",
+    },
+    "jetkai": {
+        "url": "https://cdn.jsdelivr.net/gh/jetkai/proxy-list@main/"
+               "online-proxies/txt/proxies-http.txt",
+        "format": "txt",
+    },
+    "clarketm": {
+        "url": "https://cdn.jsdelivr.net/gh/clarketm/proxy-list@master/"
+               "proxy-list-raw.txt",
+        "format": "txt",
+    },
+    "roosterkid": {
+        "url": "https://cdn.jsdelivr.net/gh/roosterkid/openproxylist@main/"
+               "HTTPS_RAW.txt",
+        "format": "txt",
     },
 }
 CACHE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -125,11 +145,18 @@ def fetch_proxies(url, prefer_country, exclude=None):
     return data
 
 
+# Kualitas/keandalan sumber (dipakai saat sort — sumber terbaik di-scan dulu)
+SOURCE_RANK = {"proxifly": 0, "monosans": 1, "hideip": 1,
+               "roosterkid": 2, "clarketm": 3, "jetkai": 3,
+               "thespeedx": 3}
+
+
 def _sort_shuffle(data, prefer_country):
     def sort_key(p):
         country = p.get("geolocation", {}).get("country", "")
         return (
             0 if country == prefer_country else 1,
+            SOURCE_RANK.get(p.get("source", ""), 5),
             0 if p.get("anonymity") == "elite" else 1,
         )
 
