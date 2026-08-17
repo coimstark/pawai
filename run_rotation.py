@@ -40,8 +40,7 @@ def parse_args():
 def main():
     args = parse_args()
     used = auto_test.load_used_proxies()
-    entries = auto_test.fetch_proxies(auto_test.PROXY_LIST_URL, "ID",
-                                      exclude=used)
+    entries = auto_test.fetch_all_proxies("ID", exclude=used)
     print(f"Proxy baru tersedia: {len(entries)} "
           f"(sudah buang {len(used)} yang dicek/dipakai)")
     working, checked = auto_test.precheck_proxies(entries,

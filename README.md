@@ -1,8 +1,20 @@
 # Auto-test Voting pawainusantara.vercel.app
 
 Auto-test flow voting dengan Camoufox (browser stealth Firefox + Playwright)
-dan rotasi proxy gratis dari [proxifly/free-proxy-list](https://github.com/proxifly/free-proxy-list)
-(daftar dirotasi ~setiap 5 menit — tiap fetch dapat IP baru).
+dan rotasi proxy gratis dari beberapa sumber (semua di-fetch via jsdelivr CDN,
+bebas rate limit GitHub):
+
+| Sumber | Update | Format |
+|--------|--------|--------|
+| [proxifly/free-proxy-list](https://github.com/proxifly/free-proxy-list) | ~5 menit | JSON (metadata negara/anonimitas) |
+| [monosans/proxy-list](https://github.com/monosans/proxy-list) | rutin | teks `ip:port` |
+| [zloi-user/hideip.me](https://github.com/zloi-user/hideip.me) | ~10 menit | teks `ip:port:Negara` |
+
+(`monosans/proxy-scraper-checker` adalah repo *tool* generator — tidak
+mempublikasikan list, jadi dilewati sebagai sumber data.)
+
+Daftar dirotasi berkala, jadi tiap fetch dapat IP baru — proxy yang sudah
+dicek/dipakai disimpan di `used_proxies.json` dan tidak pernah diulang.
 
 ## Arsitektur (fast path)
 
@@ -52,6 +64,12 @@ Opsi penting `mass_vote.py`:
 - `--precheck-target N` — hentikan pre-filter setelah N proxy hidup
   (efisien; mis. `--workers` × 2)
 - `--headless` / `--name X` / `--phone Y` (default: Faker acak)
+
+## Pemilihan sumber
+
+`--sources proxifly,monosans,hideip` (default: semua). Semua sumber
+digabung, di-dedup, dan difilter dari `used_proxies.json`. Pre-filter curl
+tetap mengetes tiap proxy (situs + host Turnstile) sebelum dipakai browser.
 
 ## Penyimpanan status (persisten)
 

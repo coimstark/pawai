@@ -36,6 +36,19 @@ PROXY_LIST_URL = (
     "https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/"
     "proxies/protocols/http/data.json"
 )
+# Sumber proxy tambahan (semua via jsdelivr CDN agar bebas rate limit)
+PROXY_SOURCES = {
+    "proxifly": {"url": PROXY_LIST_URL, "format": "json"},
+    "monosans": {
+        "url": "https://cdn.jsdelivr.net/gh/monosans/proxy-list@main/"
+               "proxies/http.txt",
+        "format": "txt",
+    },
+    "hideip": {
+        "url": "https://cdn.jsdelivr.net/gh/zloi-user/hideip.me@main/http.txt",
+        "format": "txt_country",
+    },
+}
 CACHE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                           "working_proxies.json")
 RESULTS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -57,8 +70,11 @@ def parse_args():
                    help="pakai IP lokal (tanpa proxy)")
     p.add_argument("--proxy", default=None,
                    help="pakai satu proxy, mis. http://IP:PORT")
-    p.add_argument("--proxy-list", default=PROXY_LIST_URL,
-                   help="URL daftar proxy (format JSON proxifly)")
+    p.add_argument("--proxy-list", default=None,
+                   help="URL daftar proxy JSON khusus (override semua sumber)")
+    p.add_argument("--sources", default=None,
+                   help="sumber proxy: proxifly,monosans,hideip "
+                        "(default: semua)")
     p.add_argument("--max-proxies", type=int, default=15,
                    help="jumlah proxy maksimal dicoba saat rotasi")
     p.add_argument("--precheck-limit", type=int, default=0,
@@ -95,7 +111,7 @@ def random_phone():
 
 
 def fetch_proxies(url, prefer_country, exclude=None):
-    """Ambil daftar proxy dari proxifly, urutkan: negara favorit, elite dulu.
+    """Ambil daftar proxy dari proxifly (JSON), urutkan: negara favorit dulu.
     Proksi yang ada di `exclude` (set "ip:port") dibuang — sudah dicek/dipakai."""
     req = urllib.request.Request(url, headers={"User-Agent": "auto-test"})
     with urllib.request.urlopen(req, timeout=30) as r:
@@ -103,19 +119,86 @@ def fetch_proxies(url, prefer_country, exclude=None):
     if not isinstance(data, list) or not data:
         raise RuntimeError("Daftar proxy kosong atau format tidak dikenal")
 
+    data = _sort_shuffle(data, prefer_country)
+    if exclude:
+        data = [p for p in data if p["proxy"] not in exclude]
+    return data
+
+
+def _sort_shuffle(data, prefer_country):
     def sort_key(p):
         country = p.get("geolocation", {}).get("country", "")
         return (
             0 if country == prefer_country else 1,
             0 if p.get("anonymity") == "elite" else 1,
-            0 if p.get("https") else 1,
         )
 
     data.sort(key=sort_key)
     random.shuffle(data)  # variasi dalam kelompok yang setara
-    if exclude:
-        data = [p for p in data if p["proxy"] not in exclude]
     return data
+
+
+def _parse_txt(text, exclude, protocol, country_col=False, source=""):
+    """Parse daftar teks `ip:port[:Country]` menjadi format entry proxifly."""
+    entries = []
+    seen = set()
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        parts = line.split(":")
+        if len(parts) < 2:
+            continue
+        ip, port = parts[0], parts[1]
+        if not re.match(r"^\d{1,3}(\.\d{1,3}){3}$", ip) or not port.isdigit():
+            continue
+        country = parts[2] if country_col and len(parts) > 2 else "unknown"
+        proxy = f"{protocol}://{ip}:{port}"
+        if proxy in exclude or proxy in seen:
+            continue
+        seen.add(proxy)
+        entries.append({
+            "proxy": proxy, "ip": ip, "port": int(port),
+            "protocol": protocol, "anonymity": "unknown", "https": True,
+            "geolocation": {"country": country, "city": "Unknown"},
+            "source": source,
+        })
+    return entries
+
+
+def fetch_all_proxies(prefer_country, exclude=None, sources=None):
+    """Gabungkan semua sumber proxy (proxifly, monosans, hideip), dedup.
+    Satu sumber gagal tidak menggagalkan yang lain."""
+    exclude = exclude or set()
+    all_entries = []
+    seen = set()
+    for name in (sources or list(PROXY_SOURCES)):
+        spec = PROXY_SOURCES[name]
+        try:
+            req = urllib.request.Request(spec["url"],
+                                         headers={"User-Agent": "auto-test"})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                text = r.read().decode("utf-8", "replace")
+            if spec["format"] == "json":
+                data = json.loads(text)
+                new = []
+                for p in data:
+                    if p["proxy"] in exclude or p["proxy"] in seen:
+                        continue
+                    p.setdefault("source", name)
+                    new.append(p)
+            else:
+                new = _parse_txt(text, exclude | seen, "http",
+                                 country_col=spec["format"] == "txt_country",
+                                 source=name)
+            for p in new:
+                seen.add(p["proxy"])
+            all_entries.extend(new)
+            print(f"    + {name}: {len(new)} proxy baru "
+                  f"(total {len(all_entries)})")
+        except Exception as e:
+            print(f"    ! {name}: gagal ({type(e).__name__}: {e})")
+    return _sort_shuffle(all_entries, prefer_country)
 
 
 def load_used_proxies():
@@ -394,10 +477,17 @@ def main():
         proxies = [args.proxy]
     else:
         used = set() if args.no_used else load_used_proxies()
-        print(f"[*] Ambil daftar proxy dari proxifly "
-              f"(exclude {len(used)} proxy sudah dicek/dipakai)...")
-        entries = fetch_proxies(args.proxy_list, args.prefer_country,
-                                exclude=used)
+        src_list = (args.sources.split(",") if args.sources else None)
+        if args.proxy_list:
+            print(f"[*] Ambil daftar proxy dari {args.proxy_list} "
+                  f"(exclude {len(used)} sudah dicek/dipakai)...")
+            entries = fetch_proxies(args.proxy_list, args.prefer_country,
+                                    exclude=used)
+        else:
+            print(f"[*] Ambil daftar proxy dari semua sumber "
+                  f"(exclude {len(used)} sudah dicek/dipakai)...")
+            entries = fetch_all_proxies(args.prefer_country, exclude=used,
+                                        sources=src_list)
         cached = None if args.no_precheck else load_cache()
         if cached:
             proxies = [p for p in cached if p not in used]

@@ -66,6 +66,9 @@ def parse_args():
     p.add_argument("--no-record", action="store_true",
                    help="jangan catat hasil sukses ke results.json")
     p.add_argument("--prefer-country", default="ID")
+    p.add_argument("--sources", default=None,
+                   help="sumber proxy: proxifly,monosans,hideip "
+                        "(default: semua)")
     return p.parse_args()
 
 
@@ -120,8 +123,9 @@ def main():
             # 1. Fetch daftar proxy terbaru (proxifly rotasi ~5 menit);
             #    buang proxy yang sudah dicek/dipakai (used_proxies.json)
             used = set() if args.no_used else auto_test.load_used_proxies()
-            entries = auto_test.fetch_proxies(
-                auto_test.PROXY_LIST_URL, args.prefer_country, exclude=used)
+            src_list = (args.sources.split(",") if args.sources else None)
+            entries = auto_test.fetch_all_proxies(
+                args.prefer_country, exclude=used, sources=src_list)
             print(f"  Proxy baru tersedia: {len(entries)} "
                   f"(sudah buang {len(used)} yang dicek/dipakai)")
 
